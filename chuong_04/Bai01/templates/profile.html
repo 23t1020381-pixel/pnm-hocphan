@@ -1,0 +1,2 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ profile.name }} - Hồ sơ</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><main class="profile"><div class="avatar">{{ profile.name[0] }}</div><h1>{{ profile.name }}</h1><p>Sinh viên năm {{ 2026 - 2022 }} · {{ profile.major }}</p><p>Năm hiện tại: {{ profile.year }}</p><h2>Kỹ năng</h2><ul>{% for skill in profile.skills %}<li>{{ skill }}</li>{% endfor %}</ul></main></body></html>

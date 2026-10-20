@@ -1,0 +1,1 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Danh sách bài viết</title></head><body><h1>Danh sách bài viết</h1><ul>{% for id, post in posts.items() %}<li><a href="{{ url_for('post_detail',post_id=id) }}">{{ post.title }}</a></li>{% endfor %}</ul></body></html>
