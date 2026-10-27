@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 1 - Máy tính cơ bản</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f5f2;
+            margin: 0;
+            padding: 40px 15px;
+            color: #26352b;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: auto;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #18794e;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #b9c8bd;
+            border-radius: 5px;
+            font-size: 16px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #9bd3b4;
+            border-color: #18794e;
+        }
+
+        .error {
+            color: #d00000;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #18794e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #105d3a;
+        }
+
+        .result {
+            margin-top: 22px;
+            padding: 15px;
+            background: #e7f5eb;
+            border-left: 4px solid #18794e;
+            border-radius: 4px;
+            overflow-wrap: anywhere;
+        }
+
+        .result strong {
+            color: #145c38;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Máy tính cơ bản</h2>
+
+        <form method="POST" action="{{ url_for('index') }}">
+
+            <div class="field">
+                <label for="a">Số thứ nhất (a)</label>
+
+                <input
+                    type="text"
+                    id="a"
+                    name="a"
+                    value="{{ a }}"
+                    placeholder="Ví dụ: 2,5"
+                >
+
+                {% if loi_a %}
+                    <div class="error">{{ loi_a }}</div>
+                {% endif %}
+            </div>
+
+            <div class="field">
+                <label for="op">Phép toán</label>
+
+                <select id="op" name="op">
+                    <option value="+"
+                        {% if op == '+' %}selected{% endif %}>
+                        +
+                    </option>
+
+                    <option value="-"
+                        {% if op == '-' %}selected{% endif %}>
+                        -
+                    </option>
+
+                    <option value="*"
+                        {% if op == '*' %}selected{% endif %}>
+                        *
+                    </option>
+
+                    <option value="/"
+                        {% if op == '/' %}selected{% endif %}>
+                        /
+                    </option>
+                </select>
+
+                {% if loi_op %}
+                    <div class="error">{{ loi_op }}</div>
+                {% endif %}
+            </div>
+
+            <div class="field">
+                <label for="b">Số thứ hai (b)</label>
+
+                <input
+                    type="text"
+                    id="b"
+                    name="b"
+                    value="{{ b }}"
+                    placeholder="Ví dụ: 3"
+                >
+
+                {% if loi_b %}
+                    <div class="error">{{ loi_b }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit">Tính kết quả</button>
+
+        </form>
+
+        {% if ket_qua %}
+            <div class="result" role="status">
+                <strong>Kết quả:</strong>
+                {{ ket_qua }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương Trình BÀI TẬP FLASK</title>
+    <!-- Phông chữ Inter hiện đại -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #1e293b;
+        }
+
+        .card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 460px;
+            padding: 28px 24px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f1f5f9;
+        }
+
+        /* Thanh chuyển Tab chọn bài toán */
+        .tab-switcher {
+            display: flex;
+            background-color: #f1f5f9;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding: 9px 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background-color: #ffffff;
+            color: #2563eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 19px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .card-header p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        label span.weight {
+            font-size: 11px;
+            font-weight: 500;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #0f172a;
+            background-color: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2064748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 36px;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 11px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #ffffff;
+            background-color: #2563eb;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        button:active {
+            transform: scale(0.99);
+        }
+
+        /* Thẻ hiển thị kết quả */
+        .result-box {
+            margin-top: 20px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            word-break: break-all;
+        }
+
+        .result-box.success {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+        }
+
+        .result-box.warning {
+            background-color: #fefce8;
+            border: 1px solid #fef08a;
+            color: #a16207;
+        }
+
+        .result-box.danger, .result-box.error-box {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <!-- Thanh chọn bài toán -->
+        <div class="tab-switcher">
+            <a href="/?bai=1" class="tab-btn {% if bai == '1' %}active{% endif %}">Bài 1: Máy tính</a>
+            <a href="/?bai=2" class="tab-btn {% if bai == '2' %}active{% endif %}">Bài 2: Điểm HP</a>
+            <a href="/?bai=3" class="tab-btn {% if bai == '3' %}active{% endif %}">Bài 3: Chỉ số BMI</a>
+        </div>
+
+        {% if bai == '1' %}
+            <!-- FORM BÀI 1: MÁY TÍNH CƠ BẢN -->
+            <div class="card-header">
+                <h2>Bài 1. Máy Tính Cơ Bản</h2>
+                <p>Nhập 2 số và chọn phép toán tương ứng</p>
+            </div>
+
+            <form method="POST">
+                <input type="hidden" name="bai" value="1">
+                
+                <div class="form-group">
+                    <label for="a">Số thứ nhất (a)</label>
+                    <input type="text" id="a" name="a" value="{{ a }}" placeholder="Ví dụ: 2,5">
+                    {% if loi_a %}
+                        <div class="error">{{ loi_a }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="op">Phép toán</label>
+                    <select id="op" name="op">
+                        <option value="+" {% if op == '+' %}selected{% endif %}>Cộng (+)</option>
+                        <option value="-" {% if op == '-' %}selected{% endif %}>Trừ (-)</option>
+                        <option value="*" {% if op == '*' %}selected{% endif %}>Nhân (*)</option>
+                        <option value="/" {% if op == '/' %}selected{% endif %}>Chia (/)</option>
+                    </select>
+                    {% if loi_op %}
+                        <div class="error">{{ loi_op }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="b">Số thứ hai (b)</label>
+                    <input type="text" id="b" name="b" value="{{ b }}" placeholder="Ví dụ: 3">
+                    {% if loi_b %}
+                        <div class="error">{{ loi_b }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit">Tính kết quả</button>
+            </form>
+
+            {% if ket_qua_1 %}
+                <div class="result-box success">
+                    Kết quả: {{ ket_qua_1 }}
+                </div>
+            {% endif %}
+
+        {% elif bai == '2' %}
+            <!-- FORM BÀI 2: TÍNH ĐIỂM HỌC PHẦN -->
+            <div class="card-header">
+                <h2>Bài 2. Tính Điểm Học Phần</h2>
+                <p>Nhập điểm các thành phần để xét kết quả</p>
+            </div>
+
+            <form method="POST">
+                <input type="hidden" name="bai" value="2">
+
+                <div class="form-group">
+                    <label for="cc">Chuyên cần <span class="weight">10%</span></label>
+                    <input type="text" id="cc" name="cc" value="{{ cc }}" placeholder="Nhập điểm từ 0 - 10">
+                </div>
+
+                <div class="form-group">
+                    <label for="gk">Giữa kỳ <span class="weight">30%</span></label>
+                    <input type="text" id="gk" name="gk" value="{{ gk }}" placeholder="Nhập điểm từ 0 - 10">
+                </div>
+
+                <div class="form-group">
+                    <label for="ck">Cuối kỳ <span class="weight">60%</span></label>
+                    <input type="text" id="ck" name="ck" value="{{ ck }}" placeholder="Nhập điểm từ 0 - 10">
+                </div>
+
+                <button type="submit">Tính điểm</button>
+            </form>
+
+            {% if thong_bao_2 %}
+                <div class="result-box {% if 'Lỗi' in thong_bao_2 or 'Trống' in thong_bao_2 %}error-box{% else %}success{% endif %}">
+                    Mong đợi: {{ thong_bao_2 }}
+                </div>
+            {% endif %}
+
+        {% else %}
+            <!-- FORM BÀI 3: TÍNH CHỈ SỐ BMI -->
+            <div class="card-header">
+                <h2>Bài 3. Tính Chỉ Số BMI</h2>
+                <p>Nhập chiều cao (cm) và cân nặng (kg)</p>
+            </div>
+
+            <form method="POST">
+                <input type="hidden" name="bai" value="3">
+
+                <div class="form-group">
+                    <label for="cao">Chiều cao <span class="weight">cm</span></label>
+                    <input type="text" id="cao" name="cao" value="{{ cao }}" placeholder="Ví dụ: 170">
+                </div>
+
+                <div class="form-group">
+                    <label for="nang">Cân nặng <span class="weight">kg</span></label>
+                    <input type="text" id="nang" name="nang" value="{{ nang }}" placeholder="Ví dụ: 65">
+                </div>
+
+                <button type="submit">Tính BMI</button>
+            </form>
+
+            {% if thong_bao_3 %}
+                <div class="result-box {{ mau_3 }}">
+                    Mong đợi: {{ thong_bao_3 }}
+                </div>
+            {% endif %}
+
+        {% endif %}
+    </div>
+</body>
+</html>
