@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Danh sách sinh viên{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Danh Sách Sinh Viên</h2>
+</div>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-primary">
+        <tr>
+            <th>ID</th>
+            <th>MSSV</th>
+            <th>Họ và Tên</th>
+            <th>GPA</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.id }}</td>
+            <td>{{ student.mssv }}</td>
+            <td>{{ student.name }}</td>
+            <td><span class="badge bg-success">{{ student.gpa }}</span></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-center text-muted">Chưa có dữ liệu sinh viên.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Quản Lý Sinh Viên{% endblock %}</title>
+    <!-- Thêm Bootstrap 5 để giao diện đẹp mắt -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <header class="pb-3 mb-4 border-bottom">
+            <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                <span class="fs-4 fw-bold">🎓 Hệ Thống Quản Lý Sinh Viên</span>
+            </a>
+        </header>
+
+        <main>
+            {% block content %}
+            <!-- Nội dung các trang con sẽ điền vào đây -->
+            {% endblock %}
+        </main>
+    </div>
+</body>
+</html>
