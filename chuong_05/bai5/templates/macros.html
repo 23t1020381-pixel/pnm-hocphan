@@ -1,0 +1,26 @@
+{% macro render_field(field, placeholder='', type='text') %}
+<div class="form-group">
+    {{ field.label(class="field-label") }}
+
+    {% if type == 'password' %}
+        {{ field(
+            class="form-input",
+            placeholder=placeholder,
+            autocomplete="new-password"
+        ) }}
+    {% else %}
+        {{ field(
+            class="form-input",
+            placeholder=placeholder
+        ) }}
+    {% endif %}
+
+    {% if field.errors %}
+        <div class="field-errors">
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endmacro %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Trang chủ{% endblock %}
+
+{% block content %}
+<section class="card home-card">
+    {% if session.get('user') %}
+        <h1>Xin chào {{ session.get('user') }}!</h1>
+        <p>Bạn đã đăng nhập thành công vào hệ thống.</p>
+
+        <div class="actions">
+            <a class="primary-button link-button"
+               href="{{ url_for('profile') }}">
+                Xem hồ sơ
+            </a>
+
+            <form action="{{ url_for('logout') }}" method="POST">
+                <button type="submit" class="secondary-button">
+                    Đăng xuất
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <h1>Chào mừng bạn!</h1>
+        <p>Đăng nhập để sử dụng các chức năng của hệ thống.</p>
+
+        <a class="primary-button link-button"
+           href="{{ url_for('login') }}">
+            Đăng nhập ngay
+        </a>
+    {% endif %}
+</section>
+{% endblock %}

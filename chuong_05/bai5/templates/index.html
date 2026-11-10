@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 1, 2, 3 - Chương trình Flask</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 30px 15px;
+            font-family: Arial, sans-serif;
+            background: #dbeafe;
+            color: #1e293b;
+        }
+
+        .user-bar {
+            max-width: 520px;
+            margin: 0 auto 15px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .user-bar a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .user-bar form {
+            display: inline;
+            margin: 0;
+        }
+
+        .logout-btn {
+            padding: 7px 10px;
+            border: none;
+            border-radius: 6px;
+            background: #fee2e2;
+            color: #b91c1c;
+            cursor: pointer;
+        }
+
+        .card {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 28px;
+            background: #f8fbff;
+            border: 1px solid #bfdbfe;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.08);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: #1e40af;
+            text-align: center;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            margin: 0 0 24px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 11px 5px;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .tab.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        h2 {
+            margin: 0 0 20px;
+            color: #1e40af;
+            font-size: 21px;
+        }
+
+        label.field {
+            display: block;
+            margin: 16px 0 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            background: white;
+            font-size: 15px;
+            color: #1e293b;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .result {
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 8px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .error-box {
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 8px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .hint {
+            margin-top: 18px;
+            padding: 12px;
+            background: #eff6ff;
+            border-radius: 8px;
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 20px;
+            }
+
+            .tab {
+                font-size: 12px;
+            }
+
+            .user-bar {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Thông tin người dùng -->
+    <div class="user-bar">
+        <span>Xin chào, <strong>{{ username }}</strong>!</span>
+
+        <span>
+            <a href="{{ url_for('profile') }}">Hồ sơ</a>
+
+            &nbsp;|&nbsp;
+
+            <form action="{{ url_for('logout') }}" method="POST">
+                <button class="logout-btn" type="submit">
+                    Đăng xuất
+                </button>
+            </form>
+        </span>
+    </div>
+
+    <main class="card">
+        <h1>Chương trình thực hành Flask</h1>
+
+        <p class="subtitle">
+            Bài 1 · Máy tính &nbsp;|&nbsp;
+            Bài 2 · Tính điểm &nbsp;|&nbsp;
+            Bài 3 · BMI
+        </p>
+
+        <!-- Chọn bài -->
+        <div class="tabs">
+            <button type="button" class="tab active"
+                    onclick="chuyenBai('1', this)">
+                Bài 1
+            </button>
+
+            <button type="button" class="tab"
+                    onclick="chuyenBai('2', this)">
+                Bài 2
+            </button>
+
+            <button type="button" class="tab"
+                    onclick="chuyenBai('3', this)">
+                Bài 3
+            </button>
+        </div>
+
+        <!-- BÀI 1: MÁY TÍNH -->
+        <section id="bai1" class="panel active">
+            <h2>Máy tính cơ bản</h2>
+
+            <form method="POST" action="{{ url_for('index') }}">
+                <input type="hidden" name="bai" value="1">
+
+                <label class="field" for="a">
+                    Số thứ nhất
+                </label>
+
+                <input type="text" id="a" name="a"
+                       value="{{ a }}"
+                       placeholder="Nhập số thứ nhất"
+                       required>
+
+                <label class="field" for="op">
+                    Phép toán
+                </label>
+
+                <select id="op" name="op">
+                    <option value="+"
+                        {% if op == '+' %}selected{% endif %}>
+                        Cộng (+)
+                    </option>
+
+                    <option value="-"
+                        {% if op == '-' %}selected{% endif %}>
+                        Trừ (-)
+                    </option>
+
+                    <option value="*"
+                        {% if op == '*' %}selected{% endif %}>
+                        Nhân (×)
+                    </option>
+
+                    <option value="/"
+                        {% if op == '/' %}selected{% endif %}>
+                        Chia (÷)
+                    </option>
+                </select>
+
+                <label class="field" for="b">
+                    Số thứ hai
+                </label>
+
+                <input type="text" id="b" name="b"
+                       value="{{ b }}"
+                       placeholder="Nhập số thứ hai"
+                       required>
+
+                <button class="btn" type="submit">
+                    Tính kết quả
+                </button>
+            </form>
+
+            {% if ket_qua_1 %}
+                <div class="result">
+                    <strong>Kết quả:</strong> {{ ket_qua_1 }}
+                </div>
+            {% endif %}
+
+            {% if loi_a or loi_b or loi_op %}
+                <div class="error-box">
+                    {% if loi_a %}<div>{{ loi_a }}</div>{% endif %}
+                    {% if loi_b %}<div>{{ loi_b }}</div>{% endif %}
+                    {% if loi_op %}<div>{{ loi_op }}</div>{% endif %}
+                </div>
+            {% endif %}
+
+            <div class="hint">
+                Hỗ trợ cộng, trừ, nhân và chia. Không thể chia cho 0.
+            </div>
+        </section>
+
+        <!-- BÀI 2: TÍNH ĐIỂM -->
+        <section id="bai2" class="panel">
+            <h2>Tính điểm học phần</h2>
+
+            <form method="POST" action="{{ url_for('index') }}">
+                <input type="hidden" name="bai" value="2">
+
+                <label class="field" for="cc">
+                    Điểm chuyên cần (10%)
+                </label>
+
+                <input type="text" id="cc" name="cc"
+                       value="{{ cc }}"
+                       placeholder="Nhập điểm từ 0 đến 10">
+
+                <label class="field" for="gk">
+                    Điểm giữa kỳ (30%)
+                </label>
+
+                <input type="text" id="gk" name="gk"
+                       value="{{ gk }}"
+                       placeholder="Nhập điểm từ 0 đến 10">
+
+                <label class="field" for="ck">
+                    Điểm cuối kỳ (60%)
+                </label>
+
+                <input type="text" id="ck" name="ck"
+                       value="{{ ck }}"
+                       placeholder="Nhập điểm từ 0 đến 10">
+
+                <button class="btn" type="submit">
+                    Tính điểm học phần
+                </button>
+            </form>
+
+            {% if thong_bao_2 %}
+                <div class="{% if 'Lỗi' in thong_bao_2 %}error-box{% else %}result{% endif %}">
+                    <strong>Kết quả:</strong> {{ thong_bao_2 }}
+                </div>
+            {% endif %}
+
+            <div class="hint">
+                Công thức: Điểm học phần = chuyên cần × 10%
+                + giữa kỳ × 30% + cuối kỳ × 60%.
+            </div>
+        </section>
+
+        <!-- BÀI 3: BMI -->
+        <section id="bai3" class="panel">
+            <h2>Tính chỉ số BMI</h2>
+
+            <form method="POST" action="{{ url_for('index') }}">
+                <input type="hidden" name="bai" value="3">
+
+                <label class="field" for="cao">
+                    Chiều cao (cm)
+                </label>
+
+                <input type="text" id="cao" name="cao"
+                       value="{{ cao }}"
+                       placeholder="Ví dụ: 170">
+
+                <label class="field" for="nang">
+                    Cân nặng (kg)
+                </label>
+
+                <input type="text" id="nang" name="nang"
+                       value="{{ nang }}"
+                       placeholder="Ví dụ: 65">
+
+                <button class="btn" type="submit">
+                    Tính chỉ số BMI
+                </button>
+            </form>
+
+            {% if thong_bao_3 %}
+                <div class="{% if mau_3 == 'error-box' %}error-box{% elif mau_3 == 'warning' %}result warning{% elif mau_3 == 'danger' %}result danger{% else %}result{% endif %}">
+                    <strong>Kết quả:</strong> {{ thong_bao_3 }}
+                </div>
+            {% endif %}
+
+            <div class="hint">
+                BMI = cân nặng (kg) / [chiều cao (m)]².
+                Đây là chỉ số tham khảo, không thay thế đánh giá y tế.
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function chuyenBai(soBai, nut) {
+            document.querySelectorAll('.panel').forEach(function(panel) {
+                panel.classList.remove('active');
+            });
+
+            document.querySelectorAll('.tab').forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById('bai' + soBai).classList.add('active');
+            nut.classList.add('active');
+
+            const url = new URL(window.location.href);
+            url.searchParams.set('bai', soBai);
+            history.replaceState(null, '', url);
+        }
+
+        // Khôi phục tab đang chọn sau khi gửi biểu mẫu.
+        window.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const bai = params.get('bai') || '1';
+            const tabs = document.querySelectorAll('.tab');
+
+            if (bai === '2') {
+                chuyenBai('2', tabs[1]);
+            } else if (bai === '3') {
+                chuyenBai('3', tabs[2]);
+            } else {
+                chuyenBai('1', tabs[0]);
+            }
+        });
+    </script>
+
+</body>
+</html>

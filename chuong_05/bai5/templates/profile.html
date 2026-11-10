@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #dbeafe;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            margin: 0;
+            padding: 20px;
+            color: #1e293b;
+        }
+
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 430px;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        .avatar {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        a, button {
+            display: inline-block;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        a {
+            background: #2563eb;
+            color: white;
+        }
+
+        button {
+            background: #dc2626;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="card">
+        <div class="avatar">{{ username[0]|upper }}</div>
+
+        <h1>Hồ sơ cá nhân</h1>
+
+        <p>Xin chào, <strong>{{ username }}</strong>!</p>
+        <p>Trạng thái: Đã đăng nhập.</p>
+
+        <a href="{{ url_for('index') }}">Về trang chủ</a>
+
+        <form action="{{ url_for('logout') }}"
+              method="POST"
+              style="margin-top:15px;">
+            <button type="submit">Đăng xuất</button>
+        </form>
+    </section>
+</body>
+</html>

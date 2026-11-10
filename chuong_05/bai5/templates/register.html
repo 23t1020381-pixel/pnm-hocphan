@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đăng ký tài khoản - Bài 5</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 25px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #dbeafe;
+            color: #1e293b;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: #0f172a;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            margin: 0 0 22px;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            background: #f8fbff;
+            font-size: 15px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .field-errors {
+            margin-top: 6px;
+            color: #b91c1c;
+            font-size: 13px;
+        }
+
+        .field-errors p {
+            margin: 4px 0;
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            margin: 18px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .terms input {
+            margin-top: 3px;
+        }
+
+        .terms-errors {
+            color: #b91c1c;
+            font-size: 13px;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .bottom {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .bottom a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .bottom a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .alert.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="card">
+        <h1>Đăng ký tài khoản</h1>
+
+        <p class="subtitle">
+            Bài 5 · Tạo tài khoản mới để sử dụng hệ thống
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        {% from "macros.html" import render_field %}
+
+        <form method="POST" action="{{ url_for('register') }}">
+            {{ form.hidden_tag() }}
+
+            {{ render_field(
+                form.username,
+                'Ví dụ: sv_noi'
+            ) }}
+
+            {{ render_field(
+                form.email,
+                'Ví dụ: sv_noi@example.com'
+            ) }}
+
+            {{ render_field(
+                form.password,
+                'Ít nhất 8 ký tự',
+                'password'
+            ) }}
+
+            {{ render_field(
+                form.confirm_password,
+                'Nhập lại mật khẩu',
+                'password'
+            ) }}
+
+            <div class="terms">
+                {{ form.agree() }}
+
+                <label for="{{ form.agree.id }}">
+                    Tôi đồng ý với điều khoản sử dụng.
+                </label>
+            </div>
+
+            {% if form.agree.errors %}
+                <div class="terms-errors">
+                    {% for error in form.agree.errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {{ form.submit(class="btn") }}
+        </form>
+
+        <div class="bottom">
+            Đã có tài khoản?
+            <a href="{{ url_for('login') }}">Đăng nhập</a>
+        </div>
+    </section>
+</body>
+</html>
